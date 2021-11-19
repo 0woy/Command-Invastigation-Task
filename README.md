@@ -1,20 +1,28 @@
 # Command-Invastigation-Task
 ## [오픈소스 SW개론 과제 ]  getopt, getopts(Shell) | sed, awk(Linux) 명령어 조사   
 ---
-### 목차
-#### 1. *Commands In Linux*
-> * sed
-> * awk 
+## 목차
+### 1. *Commands In Linux*
+* sed
+>  1\) sed란?\
+>  2\) sed의 특징\
+>  3\) sed 옵션\
+>  4\) sed 주요 명령어\
+>  5\) 정규식표현에 사용되는 sed 메타문자
 
-#### 2. *Commands In Shell Script*
-> * getopt
-> * getopts
+* awk 
+
+### 2. *Commands In Shell Script*
+* getopt
+* getopts
 ---
 ## 1. Commands In Linux - *sed*
 ### 1) sed란?
 >sed (streamlined editor)는 편집에 사용되는 비 대화형 모드의 줄 단위 편집기입니다.\
 >다른 편집기와 다르게 명령행에서 파일을 인자로 받아 명령어를 통해 작업한 후\
->결과를 화면으로 출력하는 방식입니다.
+>결과를 화면으로 출력하는 방식입니다.  
+
+
 
 
 ### 2) sed의 특징
@@ -72,9 +80,27 @@
  
     <img src ="https://user-images.githubusercontent.com/87132052/142612719-3ca75eac-d24e-4ed6-91b5-f00b7b4a90f0.GIF" width ="50%" height ="50%">
  
-### 5) sed 정규표현
+### 5) 정규식표현에 사용되는 sed 메타문자
 |메타문자|기능|예제|설명|
-|:---|:-------|:---|:---------:|
-|^|줄의 시작 지시자|/^love
+|:-----|:------:|:-------------:|:--------------:|
+|.|하나의 문자와 일치|`$ sed -n '/.59/p' sed.txt`|59라는 단어가 들어간 줄만 출력|
+|^|행의 시작 지시자|`$ sed -n '/^Kim/p' sed.txt`|Kim으로 시작하는 줄 출력|
+|*|0개 이상의 문자|`$ sed -n '/ *J/p' sed.txt`|0개 이상의 공백 다음 J가 포함된 줄 출력|
+|$|줄의 끝 지시자|`$ sed -n '/nam$/p' sed.txt`|nam으로 끝나는 줄 출력|
+|[ ]|괄호 안에 한 문자와 일치|`$ sed -n '/[Hh]o/p' sed.tx`|Ho 또는 ho가 포함된 줄 출력|
+|[^ ]|괄호 안에 없는 문자와 일치|`$ sed -n '/[^Hh]w/p' sed.txt`|H 또는 h가 포함되지 않고 w를 포함하는 줄 출력|
+|&|검색문을 저장, 치환문으로 기억|`$ sed -n 's/Honam/**&**/p' sed.txt`|Honam -> \**Honam\**으로 변경|
+
+ <details>
+<summary>출처</summary>
+<div markdown="1">       
+
+#### sed 
+ > [woolab블로그](https://blog.naver.com/illi0001/140110607926 "naver.blog, 조사일: 2021.11.19.")\
+ > [SED스트림에디터](http://korea.gnu.org/manual/release/sed/x110.html "조사일: 2021.11.19.")\
+ > [INCODOM](https://blog.naver.com/illi0001/140110607926 "INCODOM, 조사일: 2021.11.19.")
  
- [sed 조사 출처](https://blog.naver.com/illi0001/140110607926)
+
+</div>
+</details>
+ 
