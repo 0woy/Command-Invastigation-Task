@@ -6,7 +6,7 @@
 > * sed
 > * awk 
 
-#### 2. *Command In Shell Script*
+#### 2. *Commands In Shell Script*
 > * getopt
 > * getopts
 ---
@@ -42,17 +42,24 @@
 
  가장 많이 사용되는 p, d, s 명령어만 예제를 통해 설명하겠습니다.
  * _p : 출력 기능_
-    * sed p <file>: 파일 전체 출력
+    * sed -n p <file>: 파일 전체 출력 ('-n'을 붙이지 않으면 모두 중복 돼서 출력 됨)
     * sed 3p <file>: 3번째 줄 한 번 더 출력
     * sed 3,4p <file>: 3,4번째 줄 한 번 더 출력
     * sed /Honam/p <file>: Honam이 포함된 줄 한 번 더 출력
     * sed -n /Honam/p <file>: Honam이 포함된 줄만 출력
+ 
+     <img src ="https://user-images.githubusercontent.com/87132052/142612570-71c113a5-5cc4-4a5d-84da-b990cb901e78.gif" width ="50%" height ="50%">
+
   
  * _d : 삭제 기능_
     * sed 3d <file>: 3번째 줄 삭제, 나머지 출력
     * sed /Honam/d <file>: Honam이 포함된 줄 삭제, 나머지 출력
     * sed '3, $d' <file>: 3번째~마지막 줄 삭제, 나머지 출력
+ 
+     <img src ="https://user-images.githubusercontent.com/87132052/142612636-64a751f2-b6f7-493e-8671-28718e79e43e.gif" width ="50%" height ="50%">
   
   * _s : 치환 기능_
     * sed 's/Honam/Jeonnam/g' <file>: Honam을 Jeonnam으로 치환
     * sed -n 's/Honam/Jeonnam/p' <file>: Honam을 Jeonnam으로 치환, 치환된 줄 출력
+ 
+    <img src ="https://user-images.githubusercontent.com/87132052/142612719-3ca75eac-d24e-4ed6-91b5-f00b7b4a90f0.GIF" width ="50%" height ="50%">
