@@ -10,7 +10,7 @@
 > * getopt
 > * getopts
 ---
-## 1. Command In Linux - *sed*
+## 1. Commands In Linux - *sed*
 ### 1) sed란?
 >sed (streamlined editor)는 편집에 사용되는 명령어입니다.\
 >다른 편집기와 다르게 명령행에서 파일을 인자로 받아 명령어를 통해 작업한 후\
