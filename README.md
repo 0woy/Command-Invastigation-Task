@@ -22,9 +22,6 @@
 >다른 편집기와 다르게 명령행에서 파일을 인자로 받아 명령어를 통해 작업한 후\
 >결과를 화면으로 출력하는 방식입니다.  
 
-
-
-
 ### 2) sed의 특징
 >쉘 또는 스크립트에서 **파이프(|)** 와 같이 사용될 수 있습니다.\
 >기본적으로 **정규표현식이 가능** 하고 이 때문에 특수문자 앞에 역슬래시를 붙여줘야 합니다.\
@@ -91,6 +88,38 @@
 |[^ ]|괄호 안에 없는 문자와 일치|`$ sed -n '/[^Hh]w/p' sed.txt`|H 또는 h가 포함되지 않고 w를 포함하는 줄 출력|
 |&|검색문을 저장, 치환문으로 기억|`$ sed -n 's/Honam/**&**/p' sed.txt`|Honam -> \**Honam\**으로 변경|
 
+ --- 
+ ## 1. Commands In Linux - *awk*
+ ### 1) awk?
+ > 1997년 AT&T 연구소의 Alfred V. *A*ho, Peter J. *W*einverger, Brian W. *K*ernighan 세 사람이 만들었습니다.\
+ > 유닉스에서 개발된 스크립트 언어로 텍스트가 저장되어 있는 데이터 파일을 처리하여\
+ > 계산, 통계, 비교 분석, 필터링을 통한 데이터 추출 등 다양하게 사용되며\
+ > 리눅스에서 텍스트 처리를 위한 프로그래밍 언어입니다.
+ 
+ ### 2) awk의 특징
+ > 사용자 정의 함수 및 정규 표현식 기능을 지원합니다.\
+ > 명령 행에서 사용될 뿐만 아니라 스크립트로 사용합니다.\
+ > 배열, 함수 등과 같은 많은 내장 함수가 내포되어 있습니다.
+ 
+ ### 3) awk 형식
+ ```awk
+ $ awk 'pattern' filename
+ $ awk '{action}' filename
+ $ awk 'pattern {action}' filename
+ ```
+**pattern, action은 모두 생략 가능합니다.**
+> * pattern 생략 (모든 레코드 적용)
+>   * ` $ awk '{ print }' ./awk1.txt` 
+>   * awk1.txt의 모든 레코드 출력.
+> * action 생략 (print 적용)
+>   * ` $ awk '/p/' ./awk1.txt`           
+>   * awk1.txt에서 p를 포함하는 레코드 출력.
+ 
+### 4) 
+
+ 
+ 
+ 
  <details>
 <summary>출처</summary>
 <div markdown="1">       
@@ -100,6 +129,10 @@
  > [SED스트림에디터](http://korea.gnu.org/manual/release/sed/x110.html "조사일: 2021.11.19.")\
  > [INCODOM](http://www.incodom.kr/Linux/%EA%B8%B0%EB%B3%B8%EB%AA%85%EB%A0%B9%EC%96%B4/sed#h_e77bad097d5ab55f32983c0250f8ada5 "INCODOM, 조사일: 2021.11.19.")
  
+ ### awk
+ > [해솔](https://shlee1990.tistory.com/487 "Tistory, 조사일: 2021.11.20. ")\
+ > [INCODIOM](http://www.incodom.kr/Linux/%EA%B8%B0%EB%B3%B8%EB%AA%85%EB%A0%B9%EC%96%B4/awk, "INCODOM, 조사일: 2021.11.20.")\
+ > [개발자를 위한 레시피](https://recipes4dev.tistory.com/171, "Tistory, 조사일: 2021.11.20.")
 
 </div>
 </details>
