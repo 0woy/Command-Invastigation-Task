@@ -1,8 +1,18 @@
 # Command-Invastigation-Task
-## [오픈소스 SW개론 과제 ]  getopt, getopts(Shell) | sed, awk(Linux) 명령어 조사   
+## [오픈소스 SW개론]  getopt, getopts(Shell) | sed, awk(Linux) 명령어 조사   
 ---
 ## 목차
-### 1. *Commands In Linux*
+### 1. *Commands In Shell Script*
+* getopt
+>  1\) 왜 getopt를 사용하나요?\
+>  2\) getopt 사용하기\
+>  3\) getopt 명령을 스크립트에서 사용하기
+* getopts
+>  1\) getopt VS getopts\
+>  2\) getopts 사용하기\
+>  3\) getopts 명령을 스크립트에서 사용하기
+
+### 2. *Commands In Linux*
 * sed
 >  1\) sed란?\
 >  2\) sed의 특징\
@@ -16,13 +26,106 @@
 >  3\) awk 옵션\
 >  4\) awk 스크립트\
 >  5\) awk 사용 예시
-
-
-### 2. *Commands In Shell Script*
-* getopt
-* getopts
 ---
-## 1. Commands In Linux - *sed*
+---
+ ## 1. Commands In Shell Script - *getopt*
+ ### 1) 왜 getopt를 사용하나요?
+ > 명령어 라인에 입력으로 옵션이 조합으로 입력 되는 경우가 있습니다.\
+ > 예를 들어 `$ ls -al`과 같이 옵션이 여러개 붙어서 쓰는 경우엔 스크립트 상에서 처리가 되지 않습니다.\
+ > 이럴 경우에 사용하는 유용한 명령어가 **getopt** 입니다. 
+ 
+ ### 2) getopt 사용하기
+ 명령어 사용 구문: `$ getopt optstring parameters`
+ * optstring: 옵션으로 사용될 문자들로 구성된 문자열
+ 
+ <img src ="https://user-images.githubusercontent.com/87132052/142755320-802a74bf-dbe0-48dd-860d-98a5c9c7dee6.GIF" width ="50%" height ="50%">
+ 
+ > 위 예제는 ab:cd 형식을 옵션으로 정의하였습니다.\
+ > b 뒤의 **콜론(:)** 은 b 옵션이 **매개변수를 필요**로 함을 나타냅니다.\
+ > 명령이 실행되면 주어진 매개변수 목록을 검사하고 optstring을 기준으로 각 요소를 분리합니다.\
+ > \-cd 옵션은 자동으로 두 개의 개별 옵션으로 구분되었고\
+ > 추가 매개변수를 분리하는 **이중대시(--)** 도 자동으로 들어간 것을 확인할 수 있습니다.
+
+ ### 3) getopt 명령을 스크립트에서 사용하기
+  현재의 옵션과 파라미터 값을 getopt 명령의 출력 형식으로 바꾸는 방법중\
+  set 명령에서 더블 대쉬(--) 변수를 getopt로 변경을 하면 명령어에 입력되는 옵션과 파라미터가 getopt 명령어 형식으로 처리가 됩니다.
+ ```bash
+#!/bin/bash
+
+set -- $(getopt -q ab:c "$@")
+
+while [ -n "$1" ]
+do
+        case "$1"  in
+        -a) echo "find -a option";;
+        -b) para="$2"
+            echo "find -b opt, with para value $para"
+            shift;;
+        -c) echo "find -c option";;
+        --) shift
+            break;;
+        *) echo "$1 is not an option";;
+
+        esac
+        shift
+done
+
+count=1;
+for para in "$@"
+do
+echo "parameter #$count:$para"
+count=$[ $count + 1 ]
+done
+```
+① `$ ./getopt_ex.sh -ac`
+> <img src ="https://user-images.githubusercontent.com/87132052/142756534-cf245fed-45a6-4fce-a319-49c49cabe706.GIF" width="50%" height="50%">
+
+② `$ ./getopt_ex.sh -a -b arg1 -c -d "arg2 arg3" arg4`
+> <img src ="https://user-images.githubusercontent.com/87132052/142757191-0045f66e-ad05-4da8-b41b-f46117093701.GIF" widht="50%" height="50%">
+---
+ ## 1. Commands In Shell Script - *getopts*
+ ### 1) geopt VS getopts
+ getopt 명령은 따옴표 안에 있는 **빈 칸도 매개변수 구분자로 해석**하기 때문에(위 ②번 참고)\
+ 빈 칸과 따옴표를 사용하는 매개변수 값을 처리하기에는 좋지 않습니다.\
+ 이 문제를 해결하기 위해서는 기능이 확장된 **getopts 명령**을 사용하면 됩니다.
+ 
+ ### 2) getopts 사용하기
+ 명령어 사용 구문: `getopts OptionString Name [ Argument ...]`\
+ getopts는 2개의 환경변수를 사용합니다.\
+ 그 중 하나는 **OPTARG** 변수이고, 이 변수는 *옵션의 파라미터로 사용되는 값을 저장*합니다.\
+ **OPTIND** 변수는 파라미터 리스트에서 *getopts가 떠난 위치를 저장*해주고,\
+ 이 변수 값을 사용해서 처리 후 다시 마지막 위치로 돌아와 다음 파라미터를 처리합니다.\
+ 
+### 3) getopts 명령을 스크립트에서 사용하기
+ ```bash
+ #!/bin/bash
+
+while getopts :ab:cd opt
+do
+        case "$opt" in
+        a) echo "find the -a option";;
+        b) echo "find the -b option, with value $OPTARG";;
+        c) echo "find the -c option";;
+        d) echo "find the -d option";;
+        *) echo "Unknown option: $opt";;
+        esac
+done
+
+        shift $[ $OPTIND - 1] #OPTIND(getopts의 현 위치)를 처음으로 돌립니다.
+count=1
+for para in "$@"
+do
+        echo "Parameter $count: $para"
+        count=$[ $count + 1 ]
+done
+ ```
+* ex) `$ ./getopts_ex.sh -a -b arg1 -c -d "arg2 arg3" arg4`
+> <img src ="https://user-images.githubusercontent.com/87132052/142757986-7a688fe4-caba-466d-80eb-11ad7533956d.GIF" widht="50%" height="50%">
+> getopt와 달리 arg2, arg3가 구분되어 출력되지 않음을 볼 수 있습니다.
+
+---
+---
+## 2. Commands In Linux - *sed*
 ### 1) sed란?
 >sed (streamlined editor)는 편집에 사용되는 *비 대화형 모드*의 줄 단위 편집기입니다.\
 >다른 편집기와 다르게 명령행에서 파일을 인자로 받아 명령어를 통해 작업한 후\
@@ -35,7 +138,6 @@
 >파일의 **원본을 손상하지 않는** 게 특징입니다.\
 >즉, 입력한 명령을 수행한 후 화면으로 출력 되는 결과가 원본과 다르더라도\
 > 원본에 손상이 없습니다.
-
 
 ### 3) sed 옵션
 |옵션|기능|
@@ -95,7 +197,7 @@
 |&|검색문을 저장, 치환문으로 기억|`$ sed -n 's/Honam/**&**/p' sed.txt`|Honam -> \**Honam\**으로 변경|
 
  --- 
- ## 1. Commands In Linux - *awk*
+ ## 2. Commands In Linux - *awk*
  ### 1) awk?
  > 1997년 AT&T 연구소의 Alfred V. **A**ho, Peter J. **W**einverger, Brian W. **K**ernighan 세 사람이 만들었습니다.\
  > 유닉스에서 개발된 스크립트 언어로 텍스트가 저장되어 있는 데이터 파일을 처리하여\
@@ -177,16 +279,22 @@ action은 **모두 \{\}** 로 둘러싸야 함
 
 * 5번째 필드의 길이가 5보다 큰 레코드 출력: `awk 'length($5)>5{print}' awk1.txt`
 > <img src ="https://user-images.githubusercontent.com/87132052/142752709-995e22e6-08a9-4f30-9787-353bee4857a2.GIF" width ="50%" height ="50%">
- 
- --- 
  ---
- ## 2. Commands In Shell Script - *getopt*
+ ---
  
  <details>
 <summary>출처</summary>
-<div markdown="1">       
+<div markdown="1">     
+ 
+> 링크에 마우스를 갖다 대시면 사이트명과 조사일을 확인하실 수 있습니다.\
+> 출처를 방문하시면 보다 자세한 정보를 확인하실 수 있습니다.
+ 
+### getopt, getopts
+> [트리스탄](https://blog.naver.com/ppp0183/222396804709, "naver Blog, 조사일: 2021.11.21.")\
+> [데브로맨스](https://devromance.tistory.com/13, "Tistory, 조사일: 2021.11.21.")\
+> [IBM- getopts](https://www.ibm.com/docs/ko/aix/7.2?topic=g-getopts-command, "IBM, 조사일: 2021.11.21.")
 
-#### sed 
+### sed 
  > [woolab블로그](https://blog.naver.com/illi0001/140110607926 "naver.blog, 조사일: 2021.11.19.")\
  > [SED스트림에디터](http://korea.gnu.org/manual/release/sed/x110.html "조사일: 2021.11.19.")\
  > [INCODOM](http://www.incodom.kr/Linux/%EA%B8%B0%EB%B3%B8%EB%AA%85%EB%A0%B9%EC%96%B4/sed#h_e77bad097d5ab55f32983c0250f8ada5 "INCODOM, 조사일: 2021.11.19.")
@@ -196,8 +304,9 @@ action은 **모두 \{\}** 로 둘러싸야 함
  > [INCODIOM](http://www.incodom.kr/Linux/%EA%B8%B0%EB%B3%B8%EB%AA%85%EB%A0%B9%EC%96%B4/awk, "INCODOM, 조사일: 2021.11.20.")\
  > [개발자를 위한 레시피](https://recipes4dev.tistory.com/171, "Tistory, 조사일: 2021.11.20.")\
  > [어느해겨울](https://muabow.tistory.com/entry/awk, "Tistory, 조사일: 2021.11.21.")\
- > [IT Vibe](https://m.blog.naver.com/onevibe12/221765285982, "naver Blog, 조사일: 2021.11.21.)
+ > [IT Vibe](https://m.blog.naver.com/onevibe12/221765285982, "naver Blog, 조사일: 2021.11.21.")
  
+ ###### [Chosun Univ.] 20203169 컴퓨터공학과 박윤아
  
 </div>
 </details>
