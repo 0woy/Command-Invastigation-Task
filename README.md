@@ -11,6 +11,12 @@
 >  5\) 정규식표현에 사용되는 sed 메타문자
 
 * awk 
+>  1\) awk란?\
+>  2\) awk 특징\
+>  3\) awk 형식\
+>  4\) sed 주요 명령어\
+>  5\) 정규식표현에 사용되는 sed 메타문자
+
 
 ### 2. *Commands In Shell Script*
 * getopt
