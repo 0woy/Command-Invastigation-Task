@@ -60,7 +60,7 @@
 |q|sed 종료|`$ sed '5q' sed.txt`|
 
  가장 많이 사용되는 p, d, s 명령어만 예제를 통해 설명하겠습니다.
- * _p : 출력 기능_
+ * ___p : 출력 기능___
     * sed -n p <file>: 파일 전체 출력 ('-n'을 붙이지 않으면 모두 중복 돼서 출력 됨)
     * sed 3p <file>: 3번째 줄 한 번 더 출력
     * sed 3,4p <file>: 3,4번째 줄 한 번 더 출력
@@ -70,14 +70,14 @@
      <img src ="https://user-images.githubusercontent.com/87132052/142612570-71c113a5-5cc4-4a5d-84da-b990cb901e78.gif" width ="50%" height ="50%">
 
   
- * _d : 삭제 기능_
+ * ___d : 삭제 기능___
     * sed 3d <file>: 3번째 줄 삭제, 나머지 출력
     * sed /Honam/d <file>: Honam이 포함된 줄 삭제, 나머지 출력
     * sed '3, $d' <file>: 3번째~마지막 줄 삭제, 나머지 출력
  
      <img src ="https://user-images.githubusercontent.com/87132052/142612636-64a751f2-b6f7-493e-8671-28718e79e43e.gif" width ="50%" height ="50%">
   
-  * _s : 치환 기능_
+  * ___s : 치환 기능___
     * sed 's/Honam/Jeonnam/g' <file>: Honam을 Jeonnam으로 치환
     * sed -n 's/Honam/Jeonnam/p' <file>: Honam을 Jeonnam으로 치환, 치환된 줄 출력
  
@@ -125,10 +125,10 @@
  $ awk 'pattern {action}' filename
  ```
 **pattern, action은 모두 생략 가능합니다.**
-> * pattern 생략 (모든 레코드(line) 동작 대상)
+> * __pattern 생략__ (모든 레코드(line) 동작 대상)
 >   * ` $ awk '{ print }' ./awk1.txt` 
 >   * awk1.txt의 모든 레코드 출력.
-> * action 생략 (pattern과 일치하는 레코드(line) 출력)
+> * __action 생략__ (pattern과 일치하는 레코드(line) 출력)
 >   * ` $ awk '/p/' ./awk1.txt`           
 >   * awk1.txt에서 p를 포함하는 레코드 출력.
  
@@ -141,7 +141,7 @@
   
  #### ① pattern
  **/정규 표현식/**\
- sed가 지원하지 않는*+,|,()* 등의 메타문자도 지원\
+ sed가 지원하지 않는 **\+, \|, \(\)** 등의 메타문자도 지원\
  또한 ^,$를 각 필드의 처음과 끝을 의미하도록 사용 가능
  
 > |메타문자|기능|
