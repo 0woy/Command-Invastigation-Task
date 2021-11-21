@@ -13,9 +13,9 @@
 * awk 
 >  1\) awk란?\
 >  2\) awk 특징\
->  3\) awk 형식\
->  4\) sed 주요 명령어\
->  5\) 정규식표현에 사용되는 sed 메타문자
+>  3\) awk 옵션\
+>  4\) awk 스크립트\
+>  5\) awk 사용 예시
 
 
 ### 2. *Commands In Shell Script*
@@ -107,24 +107,80 @@
  > 명령 행에서 사용될 뿐만 아니라 스크립트로 사용합니다.\
  > 배열, 함수 등과 같은 많은 **내장 함수**가 내포되어 있습니다.
  
- ### 3) awk 형식
+ ### 3) awk의 옵션
+|옵션|기능|
+|:---|:----------:|
+|-u|버퍼를 사용하지 않고 출력|
+|-F|확장된 정규 표현식으로 필드구분자 지정, 다중 필드 구분자 사용 가능|
+|-v|스크립트 실행 전, 미리 변수를 지정|
+|-f|awk 명령 스크립트를 파일에서 읽어옴| 
+ 
+### 4) awk 스크립트
+ awk 명령에서 awk program은 
+ 아래와 같이''(single quotation marks) 안에 작성합니다.
+
  ```awk
  $ awk 'pattern' filename
  $ awk '{action}' filename
  $ awk 'pattern {action}' filename
  ```
 **pattern, action은 모두 생략 가능합니다.**
-> * pattern 생략 (모든 레코드 적용)
+> * pattern 생략 (모든 레코드(line) 동작 대상)
 >   * ` $ awk '{ print }' ./awk1.txt` 
 >   * awk1.txt의 모든 레코드 출력.
-> * action 생략 (print 적용)
+> * action 생략 (pattern과 일치하는 레코드(line) 출력)
 >   * ` $ awk '/p/' ./awk1.txt`           
 >   * awk1.txt에서 p를 포함하는 레코드 출력.
  
-### 4) 
+ pattern과 action에 작성되는 awk program 코드에는 다양한 표현식, 변수, 함수 등이 사용됩니다.\
+ 이 중 가장 중요한 변수는 *record와 field*를 나타내는 변수입니다.\
+ **하나의 record: $0, record 에 포함된 각 field는 순서대로 $1, $2, ..., $n**으로 지칭합니다.\
+
+ <img src = "https://user-images.githubusercontent.com/87132052/142750868-eeca75e5-6338-4a16-b8f1-0bcbd170cf0c.jpg" width="50%" height="50%">
+ 
+  
+ #### ① pattern
+ **/정규 표현식/**\
+ sed가 지원하지 않는*+,|,()* 등의 메타문자도 지원\
+ 또한 ^,$를 각 필드의 처음과 끝을 의미하도록 사용 가능
+ 
+> |메타문자|기능|
+> |:---|:----------:|
+> |+|하나의 문자 또는 그 이상|
+> |A\|B|OR 연산자 A 또는 B|
+> |()|하위표현식, 역참조 가능|
+> |^ $ . * \[\] \[^\] & 등|sed 정규 표현식 참고|
 
  
+ **비교 연산**\
+ 숫자 기준, 알파벳 기준 모두 사용 가능\
+ **패턴 매칭 연산**\
+ \~: 일치하는 부분 나타냄\
+ !\~: 일치하지 않는 부분 나타냄\
+ **BEGIN**\
+ 첫 번째 레코드가 읽혀지기 전에 어떤 동작을 정의하여 실행하고 싶을 때 사용\
+ **END**\
+ 마지막 레코드가 모두 읽혀진 후 어떤 동작을 정의하여 실행하고 싶을 때 사용
  
+#### ② action
+action은 **모두 \{\}** 로 둘러싸야 함
+
+### 5) awk 사용 예시
+* awk1.txt: `$ awk '{print}' awk1.txt`
+> <img src = "https://user-images.githubusercontent.com/87132052/142752238-94fb12b6-f7d9-4b5c-8e8e-9a55f1c78564.GIF" width="50%" height="50%">
+ 
+* Honam이 포함되는 행번호와 내용 출력: `$ awk '/Honam/{print "ROW:" NR,$2,$1}' awk1.txt`
+> <img src ="https://user-images.githubusercontent.com/87132052/142752330-dcf0526d-1d66-42e8-801e-c779abd7d3f6.GIF" width ="30%" height ="30%">
+ 
+* 첫번째 필드에 Yoo 포함, 1,2번째 필드 출력: `awk '$1~/Yoo/{print$1,$2}' awk1.txt`
+> <img src ="https://user-images.githubusercontent.com/87132052/142752540-86e6ebce-6911-4bc2-9fe8-c12e74940652.GIF" width ="30%" height ="30%">
+
+* 5번째 필드의 길이가 5보다 큰 레코드 출력: `awk 'length($5)>5{print}' awk1.txt`
+> <img src ="https://user-images.githubusercontent.com/87132052/142752709-995e22e6-08a9-4f30-9787-353bee4857a2.GIF" width ="50%" height ="50%">
+ 
+ --- 
+ ---
+ ## 2. Commands In Shell Script - *getopt*
  
  <details>
 <summary>출처</summary>
@@ -138,8 +194,11 @@
  ### awk
  > [해솔](https://shlee1990.tistory.com/487 "Tistory, 조사일: 2021.11.20. ")\
  > [INCODIOM](http://www.incodom.kr/Linux/%EA%B8%B0%EB%B3%B8%EB%AA%85%EB%A0%B9%EC%96%B4/awk, "INCODOM, 조사일: 2021.11.20.")\
- > [개발자를 위한 레시피](https://recipes4dev.tistory.com/171, "Tistory, 조사일: 2021.11.20.")
-
+ > [개발자를 위한 레시피](https://recipes4dev.tistory.com/171, "Tistory, 조사일: 2021.11.20.")\
+ > [어느해겨울](https://muabow.tistory.com/entry/awk, "Tistory, 조사일: 2021.11.21.")\
+ > [IT Vibe](https://m.blog.naver.com/onevibe12/221765285982, "naver Blog, 조사일: 2021.11.21.)
+ 
+ 
 </div>
 </details>
  
